@@ -1,11 +1,11 @@
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
 
 namespace Character
 {
     /// <summary>
     /// Manage read-only stats of character
     /// </summary>
+    [RequireComponent(typeof(InputReader))]
     public class CharacterManager : MonoBehaviour
     {
         InputReader _playerInput;
