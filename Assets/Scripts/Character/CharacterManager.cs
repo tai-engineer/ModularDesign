@@ -5,10 +5,9 @@ namespace Character
     /// <summary>
     /// Manage read-only stats of character
     /// </summary>
-    [RequireComponent(typeof(InputReader))]
     public class CharacterManager : MonoBehaviour
     {
-        InputReader _playerInput;
+        [SerializeField] InputReader _playerInput;
 
         #region Properties
         
@@ -26,7 +25,7 @@ namespace Character
         }
         void GetComponents()
         {
-            _playerInput = GetComponent<InputReader>();
+            
         }
     }
 }

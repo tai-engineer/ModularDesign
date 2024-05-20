@@ -4,29 +4,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputReader : MonoBehaviour,InputSettings.IGamePlayActions
+[CreateAssetMenu(menuName = "UserInput", fileName = "New Input")]
+public class InputReader : ScriptableObject,InputSettings.IGamePlayActions
 {
     InputSettings _inputSettings;
     Vector2 _moveInput;
     bool _jumpInput;
-
+    Vector2 _cameraInput;
     public Vector2 MoveInput => _moveInput;
     public bool JumpInput => _jumpInput;
-    void Awake()
+    public Vector2 CameraInput => _cameraInput;
+    void OnEnable()
     {
-        _inputSettings = new InputSettings();
+        _inputSettings ??= new InputSettings();
         _inputSettings.GamePlay.AddCallbacks(this);
         _inputSettings.GamePlay.Enable();
     }
 
-    void OnEnable()
-    {
-        _inputSettings?.Enable();
-    }
-
     void OnDisable()
     {
-        _inputSettings?.Disable();
+        _inputSettings.GamePlay.Disable();
     }
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -43,5 +40,10 @@ public class InputReader : MonoBehaviour,InputSettings.IGamePlayActions
         {
             _jumpInput = false;
         }
+    }
+
+    public void OnCamera(InputAction.CallbackContext context)
+    {
+        _cameraInput = context.ReadValue<Vector2>();
     }
 }
