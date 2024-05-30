@@ -44,7 +44,7 @@ TagManager:
   - CompanionAI
   - Triggers
   - StopMove
-  - 
+  - MuseTextureLayer
   - HeadTrack
   - BodyPart
   - BlockAIRayCast

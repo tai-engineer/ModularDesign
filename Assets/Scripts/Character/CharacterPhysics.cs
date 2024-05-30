@@ -12,7 +12,7 @@ namespace Character
     [RequireComponent(typeof(CharacterManager))]
     public class CharacterPhysics : MonoBehaviour
     {
-    #region ReadOnly Fields
+    #region Serialized Fields
         
         [Header("Movement")] 
         [SerializeField] float _walkSpeed = 5f;
@@ -40,6 +40,7 @@ namespace Character
     #region Properties
 
         public bool Grounded { get; private set; }
+        public Vector3 MoveVector => _moveVector;
 
     #endregion
         void Awake()
@@ -90,7 +91,23 @@ namespace Character
 
         void HorizontalMovementUpdate()
         {
-            var moveAmount = _character.MoveInput * _walkSpeed;
+            Vector3 direction;
+            if (_character.InputSpace)
+            {
+                var forward = _character.InputSpace.forward;
+                forward.y = 0;
+                forward.Normalize();
+                var right = _character.InputSpace.right;
+                right.y = 0;
+                right.Normalize();
+                direction = forward * _character.MoveInput.z + right * _character.MoveInput.x;
+            }
+            else
+            {
+                direction = _character.MoveInput;
+            }
+
+            var moveAmount = direction * _walkSpeed;
             _moveVector = new Vector3(moveAmount.x, _moveVector.y, moveAmount.z);
         }
 

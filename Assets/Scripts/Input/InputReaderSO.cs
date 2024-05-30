@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(menuName = "UserInput", fileName = "New Input")]
-public class InputReader : ScriptableObject,InputSettings.IGamePlayActions
+public class InputReaderSO : ScriptableObject,InputSettings.IGamePlayActions
 {
     InputSettings _inputSettings;
     Vector2 _moveInput;
