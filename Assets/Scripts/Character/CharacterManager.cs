@@ -13,18 +13,23 @@ namespace Character
         [SerializeField]
         Transform _playerInputSpace;
 
-        CharacterPhysics _physics;
+        CharacterPhysics _characterPhysics;
         #region Properties
         
         public bool IsGrounded { get; private set; }
 
         public bool IsJumping { get; private set; }
         public bool JumpInput => _playerInput.JumpInput;
-        public Vector3 MoveInput => new Vector3(_playerInput.MoveInput.x, 0, _playerInput.MoveInput.y);
+
+        /// <summary>
+        /// 2D Input ( x => left/right, y => forward/backward)
+        /// </summary>
+        public Vector3 MoveInput => _playerInput.MoveInput;
         public Transform InputSpace => _playerInputSpace;
+        
+        public Vector3 MoveVector => _characterPhysics == null ? Vector3.zero : _characterPhysics.MoveVector;
 
-        public Vector3 MoveVector => _physics == null ? Vector3.zero : _physics.MoveVector;
-
+        public bool GettingMoveInput => _playerInput.MoveInput.x != 0 || _playerInput.MoveInput.y != 0;
         #endregion
         
         void Awake()
@@ -33,7 +38,12 @@ namespace Character
         }
         void GetComponents()
         {
-            _physics = GetComponent<CharacterPhysics>();
+            _characterPhysics = GetComponent<CharacterPhysics>();
+        }
+
+        public void MoveToPosition(Vector3 pos)
+        {
+            _characterPhysics.MoveTo(pos);
         }
     }
 }

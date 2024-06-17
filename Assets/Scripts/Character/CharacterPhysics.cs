@@ -1,22 +1,18 @@
-using System;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 namespace Character
 {
-    /// <summary>
-    /// Manage character physics, collisions
-    /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CharacterManager))]
     public class CharacterPhysics : MonoBehaviour
     {
     #region Serialized Fields
         
-        [Header("Movement")] 
-        [SerializeField] float _walkSpeed = 5f;
+        [Header("Movement"), Min(1f)] 
+        [SerializeField] float _maxDistance = 5f;
 
+        [SerializeField, Min(0f)]
+        float _walkSpeed = 20f;
         [SerializeField] float _jumpForce = 10f;
         [SerializeField] float _fallSpeed = 2f;
 
@@ -34,14 +30,19 @@ namespace Character
         Rigidbody _rb;
         float _gravity;
 
-        Vector3 _moveVector;
+        Vector3 _moveVector = Vector3.zero;
+        Vector3 _targetPos = Vector3.zero;
+        Vector3 _prevTargetPos = Vector3.zero;
+        Vector3 _direction = Vector3.zero;
     #endregion
 
     #region Properties
 
         public bool Grounded { get; private set; }
         public Vector3 MoveVector => _moveVector;
+        public Vector3 Direction => _direction;
 
+        bool MovingToTarget { get; set; }
     #endregion
         void Awake()
         {
@@ -52,8 +53,8 @@ namespace Character
         void Update()
         {
             GroundCheck();
-            HorizontalMovementUpdate();
-            VerticalMovementUpdate();
+            Jump();
+            UpdateMoveVector();
         }
         
         void FixedUpdate()
@@ -73,13 +74,19 @@ namespace Character
             _gravity = Physics.gravity.y;
             _rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         }
-        void VerticalMovementUpdate()
-        {
-            if (_character.JumpInput && Grounded)
-            {
-                _moveVector.y = _jumpForce;
-            }
 
+        void UpdateMoveVector()
+        {
+            float distance = GetDistance();
+            _direction = GetDirection();
+            Vector3 moveAmount = _direction * distance;
+            
+            _moveVector = Vector3.MoveTowards(_moveVector, moveAmount, Time.deltaTime * _walkSpeed);
+            ApplyGravity();
+        }
+
+        void ApplyGravity()
+        {
             if (_moveVector.y <= 0 && Grounded)
             {
                 _moveVector.y = 0;
@@ -89,9 +96,22 @@ namespace Character
             _moveVector.y += _gravity * Time.deltaTime * _fallSpeed;
         }
 
-        void HorizontalMovementUpdate()
+        void Jump()
         {
-            Vector3 direction;
+            if (_character.JumpInput && Grounded)
+            {
+                _moveVector.y = _jumpForce;
+            }
+        }
+        public void MoveTo(Vector3 target)
+        {
+            MovingToTarget = true;
+            _targetPos = target;
+        }
+        Vector3 GetDirection()
+        {
+            if (!_character.GettingMoveInput) return MovingToTarget ? GetDirection(_targetPos) : Vector3.zero;
+            Vector3 dir = Vector3.zero;
             if (_character.InputSpace)
             {
                 var forward = _character.InputSpace.forward;
@@ -100,17 +120,40 @@ namespace Character
                 var right = _character.InputSpace.right;
                 right.y = 0;
                 right.Normalize();
-                direction = forward * _character.MoveInput.z + right * _character.MoveInput.x;
+                dir = forward * _character.MoveInput.y + right * _character.MoveInput.x;
             }
             else
             {
-                direction = _character.MoveInput;
+                dir = new Vector3(_character.MoveInput.y, 0, _character.MoveInput.x);
             }
 
-            var moveAmount = direction * _walkSpeed;
-            _moveVector = new Vector3(moveAmount.x, _moveVector.y, moveAmount.z);
+            return dir.normalized;
+
         }
 
+        Vector3 GetDirection(Vector3 target)
+        {
+            return (target - _tf.position).normalized;
+        }
+
+        float GetDistance()
+        {
+            return MovingToTarget ? GetDistance(_targetPos) : _maxDistance;
+        }
+
+        float GetDistance(Vector3 target)
+        {
+            float dist = Vector3.Distance(_tf.position, target);
+            if (dist > 0.5f)
+            {
+                return dist;
+            }
+            
+            _prevTargetPos = _targetPos;
+            MovingToTarget = false;
+
+            return 0f;
+        }
         void GroundCheck()
         {
             Vector3 dir = -_tf.up;
@@ -125,7 +168,6 @@ namespace Character
 
             Grounded = false;
         }
-        
     #if UNITY_EDITOR
         void OnDrawGizmosSelected()
         {

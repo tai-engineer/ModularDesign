@@ -1366,7 +1366,7 @@ GameObject:
   - component: {fileID: 155307739}
   m_Layer: 0
   m_Name: OrbitCamera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1455,8 +1455,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 155307738}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.23327564, y: 0, z: 0, w: 0.9724107}
-  m_LocalPosition: {x: -65.57008, y: 5.36, z: 82.07463}
+  m_LocalRotation: {x: -0.497574, y: 0.005720263, z: -0.0032952493, w: -0.8673964}
+  m_LocalPosition: {x: -35.632633, y: 7.1538568, z: 48.901505}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3551,6 +3551,7 @@ GameObject:
   - component: {fileID: 547635410}
   - component: {fileID: 547635411}
   - component: {fileID: 547635409}
+  - component: {fileID: 547635412}
   m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
@@ -3567,7 +3568,7 @@ Transform:
   m_GameObject: {fileID: 547635404}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -60.06, y: 1, z: 52.5}
+  m_LocalPosition: {x: -35.68, y: 0, z: 52.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3586,7 +3587,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dece1d1743854467bfe421353a582e17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _walkSpeed: 5
+  _maxDistance: 5
+  _walkSpeed: 20
   _jumpForce: 10
   _fallSpeed: 2
   _sphereDistance: 0.51
@@ -3635,6 +3637,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerInput: {fileID: 11400000, guid: eba9eb72b12187542aa31423daaac703, type: 2}
   _playerInputSpace: {fileID: 155307741}
+--- !u!114 &547635412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 547635404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c5daf741af45818eccd4bd5b6c496a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainCamera: {fileID: 155307740}
+  _hitLayer:
+    serializedVersion: 2
+    m_Bits: 524288
 --- !u!1 &558491428
 GameObject:
   m_ObjectHideFlags: 0
@@ -7146,7 +7164,7 @@ Transform:
   m_GameObject: {fileID: 1819806895}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
