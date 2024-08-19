@@ -1,35 +1,24 @@
 using System;
+using Physics;
 using UnityEngine;
 
 namespace Character.Physics
 {
     [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(GroundDetector))]
     public class CharacterPhysics : MonoBehaviour
     {
-        Rigidbody _rb;
         [SerializeField] InputReaderSO _input;
         
-        Vector3 _moveVector = Vector3.zero;
+        Vector3 _moveVector;
         Vector2 _moveInput;
         bool _jumpInput;
+        float _verticalMovement;
 
         [SerializeField]
         float _moveSpeed = 5f;
         float _gravity; // Gravity has negative value
-        public bool IsGrounded { get; private set; }
-
-        [SerializeField]
-        [Tooltip("An empty GameObject to specify the check position")]
-        Transform _groundCheck;
-
-        [SerializeField]
-        [Tooltip("Radius of the sphere to check for ground")]
-        float _groundCheckRadius = 0.2f;
-
-        [SerializeField]
-        [Tooltip("Layer that represents the ground")]
-        LayerMask _groundLayer;
-
+        
         [SerializeField]
         float _jumpForce = 5f;
 
@@ -39,8 +28,15 @@ namespace Character.Physics
         // [SerializeField]
         // float _maxRiseSpeed = 100f;
         
-        float _verticalMovement;
         public float gravityMultiplier = 5f;
+
+        #region Properties
+        public bool IsGrounded { get; private set; }
+
+        #endregion
+        
+        Rigidbody _rb;
+        GroundDetector _groundDetector;
         void OnEnable()
         {
             _input.OnMoveEvent += OnMove;
@@ -56,6 +52,7 @@ namespace Character.Physics
         void Awake()
         {
             _rb = GetComponent<Rigidbody>();
+            _groundDetector = GetComponent<GroundDetector>();
         }
 
         void Start()
@@ -82,7 +79,7 @@ namespace Character.Physics
         }
         void GroundCheck()
         {
-            IsGrounded = UnityEngine.Physics.CheckSphere(_groundCheck.position, _groundCheckRadius, _groundLayer);
+            IsGrounded = _groundDetector.Check();
         }
         void AirborneMovement()
         {

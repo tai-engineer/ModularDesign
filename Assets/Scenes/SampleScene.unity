@@ -337,6 +337,7 @@ GameObject:
   - component: {fileID: 748581805}
   - component: {fileID: 748581804}
   - component: {fileID: 748581803}
+  - component: {fileID: 748581809}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -357,14 +358,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _input: {fileID: 11400000, guid: a697e291e1e95e6469dd5d90f293ec07, type: 2}
-  _groundCheck: {fileID: 1442493924}
-  _groundCheckRadius: 0.5
-  _groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  _jumpForce: 100
-  _maxFallSpeed: -50
-  _maxRiseSpeed: 100
+  _moveSpeed: 5
+  _jumpForce: 8
   gravityMultiplier: 5
 --- !u!54 &748581804
 Rigidbody:
@@ -482,6 +477,23 @@ Transform:
   - {fileID: 1442493924}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &748581809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748581802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa9a6f07f4ca480291b9ce6da21b8357, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _relativePosition: {x: 0, y: -0.6, z: 0}
+  _layer:
+    serializedVersion: 2
+    m_Bits: 64
+  _sphereRadius: 0.5
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
