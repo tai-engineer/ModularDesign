@@ -338,8 +338,9 @@ GameObject:
   - component: {fileID: 748581804}
   - component: {fileID: 748581803}
   - component: {fileID: 748581809}
+  - component: {fileID: 748581810}
   m_Layer: 0
-  m_Name: Capsule
+  m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -358,9 +359,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _input: {fileID: 11400000, guid: a697e291e1e95e6469dd5d90f293ec07, type: 2}
-  _moveSpeed: 5
-  _jumpForce: 8
-  gravityMultiplier: 5
 --- !u!54 &748581804
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -494,6 +492,23 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _sphereRadius: 0.5
+--- !u!114 &748581810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748581802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bb003ef40a2401eb5460e8012f96544, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultState: {fileID: 11400000, guid: ea31ba5721a35014fa0e9b5a72fac5ad, type: 2}
+  _states:
+  - {fileID: 11400000, guid: b4d0da89bdd99f94abe07c0a1b256cc9, type: 2}
+  - {fileID: 11400000, guid: 45cf500d2a891d74aa2d95525a52bb1b, type: 2}
+  - {fileID: 11400000, guid: f44c215376226b34b81feb28da766c81, type: 2}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -623,5 +638,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 963194228}
   - {fileID: 705507995}
-  - {fileID: 748581808}
   - {fileID: 499404426}
+  - {fileID: 748581808}
