@@ -9,8 +9,8 @@ namespace Character.StateMachine.State
         float _runSpeed = 5f;
         public override void Update()
         {
-            var movement = _runSpeed * character.MoveInput;
-            character.moveVector = new Vector3(movement.x, character.moveVector.y, movement.y);
+            character.moveVector.x = character.MoveInput.x * _runSpeed;
+            character.moveVector.z = character.MoveInput.z * _runSpeed;
         }
         protected override bool TryGetGroundedTransition(out BaseStateSO newState)
         {

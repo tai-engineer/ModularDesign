@@ -9,12 +9,15 @@ namespace Character.Physics
     public class CharacterPhysics : MonoBehaviour
     {
         [SerializeField] InputReaderSO _input;
-        
+
+        [SerializeField]
+        Transform _gameplayCamera;
         [NonSerialized] public Vector3 moveVector;
+        Vector2 _inputVector;
         
         #region Properties
         public bool IsGrounded { get; private set; }
-        public Vector2 MoveInput { get; private set; }
+        public Vector3 MoveInput { get; private set; }
         public bool JumpInput { get; private set; }
 
         #endregion
@@ -47,16 +50,37 @@ namespace Character.Physics
         void Update()
         {
             GroundCheck();
+            RecalculateMovementDirection();
             Debug.Log($"_moveVector: {moveVector}, IsGrounded: {IsGrounded}");
         }
 
+        void RecalculateMovementDirection()
+        {
+            Vector3 adjustedMovement;
+            if (_gameplayCamera)
+            {
+                var cameraRight = _gameplayCamera.right;
+                cameraRight.y = 0;
+                var cameraForward = _gameplayCamera.forward;
+                cameraForward.y = 0;
+
+                adjustedMovement = cameraRight * _inputVector.x + cameraForward
+                    * _inputVector.y;
+            }
+            else
+            {
+                adjustedMovement = new Vector3(_inputVector.x, 0, _inputVector.y);
+            }
+
+            MoveInput = adjustedMovement;
+        }
         void GroundCheck()
         {
             IsGrounded = _groundDetector.Check();
         }
         #region Callback
 
-        void OnMove(Vector2 moveInput) => MoveInput = moveInput;
+        void OnMove(Vector2 moveInput) => _inputVector = moveInput;
         void OnJump(bool jumpInput) => JumpInput = jumpInput;
         #endregion
     }
