@@ -4,8 +4,8 @@ using UnityEngine.InputSystem;
 [CreateAssetMenu(menuName = "Input/GameControl", fileName = "New Game Input")]
 public class InputReaderSO : ScriptableObject, GameControls.IGamePlayActions
 {
-    public event Action<Vector2> OnMoveEvent = delegate { };
-    public event Action<bool> OnJumpStartEvent = delegate { };
+    public event Action<Vector2> moveEvent = delegate { };
+    public event Action<bool> jumpStartedEvent = delegate { };
     public event Action startedRunning = delegate { };
     public event Action stoppedRunning = delegate { };
     public event Action enableMouseControlCameraEvent = delegate { };
@@ -31,12 +31,12 @@ public class InputReaderSO : ScriptableObject, GameControls.IGamePlayActions
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        OnMoveEvent.Invoke(context.ReadValue<Vector2>());
+        moveEvent.Invoke(context.ReadValue<Vector2>());
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        OnJumpStartEvent.Invoke(context.ReadValueAsButton());
+        jumpStartedEvent.Invoke(context.ReadValueAsButton());
     }
 
     public void OnMouseControlCamera(InputAction.CallbackContext context)
