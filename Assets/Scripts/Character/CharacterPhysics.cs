@@ -26,14 +26,14 @@ namespace Character.Physics
         GroundDetector _groundDetector;
         void OnEnable()
         {
-            _input.OnMoveEvent += OnMove;
-            _input.OnJumpStartEvent += OnJump;
+            _input.moveEvent += OnMove;
+            _input.jumpStartedEvent += OnJump;
         }
 
         void OnDisable()
         {
-            _input.OnMoveEvent -= OnMove;
-            _input.OnJumpStartEvent -= OnJump;
+            _input.moveEvent -= OnMove;
+            _input.jumpStartedEvent -= OnJump;
         }
 
         void Awake()
