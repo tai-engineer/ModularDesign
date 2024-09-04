@@ -10,7 +10,7 @@ public class InputReaderSO : ScriptableObject, GameControls.IGamePlayActions
     public event Action stoppedRunning = delegate { };
     public event Action enableMouseControlCameraEvent = delegate { };
     public event Action disableMouseControlCameraEvent = delegate { };
-    public event Action<Vector2> cameraMoveEvent = delegate { };
+    public event Action<Vector2,bool> cameraMoveEvent = delegate { };
 
     GameControls _controls;
     void OnEnable()
@@ -29,6 +29,8 @@ public class InputReaderSO : ScriptableObject, GameControls.IGamePlayActions
         _controls.GamePlay.Disable();
     }
 
+    #region Movement
+
     public void OnMove(InputAction.CallbackContext context)
     {
         moveEvent.Invoke(context.ReadValue<Vector2>());
@@ -37,23 +39,6 @@ public class InputReaderSO : ScriptableObject, GameControls.IGamePlayActions
     public void OnJump(InputAction.CallbackContext context)
     {
         jumpStartedEvent.Invoke(context.ReadValueAsButton());
-    }
-
-    public void OnMouseControlCamera(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Performed)
-        {
-            enableMouseControlCameraEvent.Invoke();
-        }
-        if (context.phase == InputActionPhase.Canceled)
-        {
-            disableMouseControlCameraEvent.Invoke();
-        }
-    }
-
-    public void OnRotateCamera(InputAction.CallbackContext context)
-    {
-        cameraMoveEvent.Invoke(context.ReadValue<Vector2>());
     }
 
     public void OnRun(InputAction.CallbackContext context)
@@ -68,4 +53,30 @@ public class InputReaderSO : ScriptableObject, GameControls.IGamePlayActions
                 break;
         }
     }
+
+    #endregion
+
+    #region Camera
+    public void OnMouseControlCamera(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            enableMouseControlCameraEvent.Invoke();
+        }
+        if (context.phase == InputActionPhase.Canceled)
+        {
+            disableMouseControlCameraEvent.Invoke();
+        }
+    }
+    public void OnRotateCamera(InputAction.CallbackContext context)
+    {
+        cameraMoveEvent.Invoke(context.ReadValue<Vector2>(), IsDeviceMouse
+            (context));
+    }
+    bool IsDeviceMouse(InputAction.CallbackContext context) => context
+        .control.device.name == "Mouse";
+    #endregion
+    
+
+    
 }
