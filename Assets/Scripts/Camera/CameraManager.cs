@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Cinemachine;
+using System.Collections;
 namespace Camera
 {
     public class CameraManager : MonoBehaviour
@@ -15,8 +16,10 @@ namespace Camera
 
         bool _isRMBPressed;
 
-        [SerializeField, Range(0.5f, 3f)]
+        [SerializeField, Range(.5f, 3f)]
         float _speedMultiplier = 1f;
+
+        // bool _cameraMovementLock = false;
         void Awake()
         {
             SetupCharacterVirtualCamera(_characterTransform);
@@ -28,7 +31,7 @@ namespace Camera
             _freeLookVCam.Follow = target;
             // Use when character suddenly moves to a different location (for example, through teleportation or loading new scene)
             // _freeLookVCam.OnTargetObjectWarped(target, target.position - 
-            //     _freeLookVCam.transform.position - Vector3.forward);
+            //      _freeLookVCam.transform.position - Vector3.forward);
         }
         void OnEnable()
         {
@@ -45,16 +48,19 @@ namespace Camera
             _input.cameraMoveEvent -= OnCameraMove;
         }
 
-        void OnCameraMove(Vector2 cameraMovement)
+        void OnCameraMove(Vector2 cameraMovement, bool isDeviceMouse)
         {
-            if (!_isRMBPressed)
+            // if (_cameraMovementLock)
+            //     return;
+            if (isDeviceMouse && !_isRMBPressed)
                 return;
             
             _freeLookVCam.m_XAxis.m_InputAxisValue = cameraMovement.x * Time
-                .deltaTime * _speedMultiplier;
+                 .deltaTime * _speedMultiplier;
             _freeLookVCam.m_YAxis.m_InputAxisValue = cameraMovement.y * Time
-                .deltaTime * _speedMultiplier;;
+                .deltaTime * _speedMultiplier;
         }
+        
 
         void OnDisableMouseControlCamera()
         {
@@ -65,8 +71,8 @@ namespace Camera
             
             // when mouse control is disabled, the input needs to be cleared
             // or the last frame's input will 'stick' until the action is invoked again
-            // _freeLookVCam.m_XAxis.m_InputAxisValue = 0;
-            // _freeLookVCam.m_YAxis.m_InputAxisValue = 0;
+            _freeLookVCam.m_XAxis.m_InputAxisValue = 0;
+            _freeLookVCam.m_YAxis.m_InputAxisValue = 0;
         }
 
         void OnEnableMouseControlCamera()
@@ -75,7 +81,14 @@ namespace Camera
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+            
+            // StartCoroutine(DisableMouseControlForFrame());
         }
-        
+        // IEnumerator DisableMouseControlForFrame()
+        // {
+        //     _cameraMovementLock = true;
+        //     yield return new WaitForEndOfFrame();
+        //     _cameraMovementLock = false;
+        // }
     }
 }
