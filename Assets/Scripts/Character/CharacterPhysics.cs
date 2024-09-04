@@ -51,7 +51,7 @@ namespace Character.Physics
         {
             GroundCheck();
             RecalculateMovementDirection();
-            Debug.Log($"_moveVector: {moveVector}, IsGrounded: {IsGrounded}");
+            // Debug.Log($"_moveVector: {moveVector}, IsGrounded: {IsGrounded}");
         }
 
         void RecalculateMovementDirection()
@@ -64,8 +64,8 @@ namespace Character.Physics
                 var cameraForward = _gameplayCamera.forward;
                 cameraForward.y = 0;
 
-                adjustedMovement = cameraRight * _inputVector.x + cameraForward
-                    * _inputVector.y;
+                adjustedMovement = cameraRight.normalized * _inputVector.x + 
+                    cameraForward.normalized * _inputVector.y;
             }
             else
             {
