@@ -23,14 +23,14 @@ namespace Character.StateMachine
         void Awake()
         {
             _character = GetComponent<CharacterPhysics>();
-            _animator = _character.GetComponent<Animator>();
+            _animator = _character.GetComponentInChildren<Animator>();
         }
 
         void Start()
         {
             Init();
             _currentState = _defaultState;
-            _currentState.Enter();
+            _currentState.OnStateEnter();
         }
 
         void Update()
@@ -39,7 +39,7 @@ namespace Character.StateMachine
             {
                 TransitionTo(newState);
             }
-            _currentState.Update();
+            _currentState.OnStateUpdate();
         }
 
         void Init()
@@ -63,9 +63,9 @@ namespace Character.StateMachine
         }
         void TransitionTo(BaseStateSO newBaseState)
         {
-            _currentState.Exit();
+            _currentState.OnStateExit();
             _currentState = newBaseState;
-            _currentState.Enter();
+            _currentState.OnStateEnter();
         }
     }
 }
