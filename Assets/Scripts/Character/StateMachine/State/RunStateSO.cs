@@ -7,6 +7,7 @@ namespace Character.StateMachine.State
     {
         [SerializeField]
         float _runSpeed = 5f;
+
         public override void Update()
         {
             character.moveVector.x = character.MoveInput.x * _runSpeed;
@@ -15,7 +16,7 @@ namespace Character.StateMachine.State
         protected override bool TryGetGroundedTransition(out BaseStateSO newState)
         {
             newState = null;
-            if (character.MoveInput.sqrMagnitude < 1)
+            if (!character.GettingMoveInput)
             {
                 return stateMachine.statesDict.TryGetValue("Idle", out newState);
             }

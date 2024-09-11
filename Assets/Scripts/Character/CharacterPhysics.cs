@@ -20,6 +20,8 @@ namespace Character.Physics
         public Vector3 MoveInput { get; private set; }
         public bool JumpInput { get; private set; }
 
+        public bool GettingMoveInput => MoveInput.x != 0 || MoveInput.z != 0;
+
         #endregion
         
         Rigidbody _rb;
@@ -51,7 +53,7 @@ namespace Character.Physics
         {
             GroundCheck();
             RecalculateMovementDirection();
-            // Debug.Log($"_moveVector: {moveVector}, IsGrounded: {IsGrounded}");
+            Debug.Log($"_moveVector: {moveVector}, IsGrounded: {IsGrounded}");
         }
 
         void RecalculateMovementDirection()
