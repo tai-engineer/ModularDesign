@@ -6,7 +6,7 @@ namespace Character.StateMachine.State
         {
             if (character.IsGrounded)
             {
-                return stateMachine.statesDict.TryGetValue("Idle", out newState);
+                return stateMachine.statesDict.TryGetValue("Landing", out newState);
             }
             return TryGetAirborneTransition(out newState);
         }
